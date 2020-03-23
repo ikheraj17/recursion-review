@@ -42,9 +42,29 @@ var stringifyJSON = function(obj) {
       resultArr.push(stringifyJSON(obj[i]));
       //we will recurse it
     }
-
     return  '[' + resultArr + ']';
   }
+ //if obj is an object
+  if(typeof obj === "object" && Object.keys(obj).length === 0){
+    return  '{}';
+ }
 
+  if(!Array.isArray(obj) && typeof obj === "object"){
+    //loop over keys
+    //create result object
+    var resultArr = [];
+    for (var keys in obj){
+      var values = obj[keys]
+      var strVal = stringifyJSON(values)
+      var strKey = stringifyJSON(keys);
+      if(typeof values === "function"){
+        return "{}";
+      }
+      resultArr.push(strKey + ':', strVal, ',');
+    }
+    resultArr.pop();
+    var resultStr = resultArr.join('')
+    return "{" + resultStr + "}";
+  }
 };
 
