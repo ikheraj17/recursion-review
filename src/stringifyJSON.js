@@ -44,26 +44,28 @@ var stringifyJSON = function(obj) {
     }
     return  '[' + resultArr + ']';
   }
- //if obj is an object
+  //if obj is an object and length is 0
   if(typeof obj === "object" && Object.keys(obj).length === 0){
     return  '{}';
- }
-
+  }
   if(!Array.isArray(obj) && typeof obj === "object"){
     //loop over keys
     //create result object
     var resultArr = [];
     for (var keys in obj){
-      var values = obj[keys]
-      var strVal = stringifyJSON(values)
+      //stringify the values
+      var strVal = stringifyJSON(obj[keys]);
+      //stringify the keys
       var strKey = stringifyJSON(keys);
-      if(typeof values === "function"){
-        return "{}";
-      }
+      //chck if value is a function
+      if(typeof obj[keys] === "function") {return "{}";}
+      //if not, push key value pairs, colon, and comma into resultArr
       resultArr.push(strKey + ':', strVal, ',');
     }
+    //get rid of the last comma
     resultArr.pop();
-    var resultStr = resultArr.join('')
+    //turn into string before wrapping in curly braces
+    var resultStr = resultArr.join('');
     return "{" + resultStr + "}";
   }
 };
